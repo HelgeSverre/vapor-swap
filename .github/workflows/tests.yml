@@ -26,7 +26,7 @@ jobs:
           - {os: windows-latest, php: '8.3', experimental: false}
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
@@ -56,6 +56,7 @@ jobs:
         run: composer lint
       - name: Test
         id: tests
+        if: ${{ !cancelled() && steps.platform.outcome == 'success' }}
         run: composer test -- --log-junit junit.xml
       - name: Install real Vapor CLI for compatibility test
         if: runner.os != 'Windows'
@@ -68,7 +69,7 @@ jobs:
         run: composer test -- --filter VaporCompatibilityTest
       - name: Upload test report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: tests-php-${{ matrix.php }}-${{ matrix.os }}
           path: junit.xml

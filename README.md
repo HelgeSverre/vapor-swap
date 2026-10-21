@@ -1,5 +1,7 @@
 # vapor-swap
 
+[![Tests](https://github.com/HelgeSverre/vapor-swap/actions/workflows/tests.yml/badge.svg)](https://github.com/HelgeSverre/vapor-swap/actions/workflows/tests.yml)
+
 Manage named Laravel Vapor profiles and switch accounts for one terminal or permanently. A profile pairs an API token with a team, so you can save multiple teams belonging to the same account under different names.
 
 Requires PHP 8.2+, Composer, and Laravel Vapor CLI. Session switching supports Bash, Zsh, and Fish on macOS/Linux. Profile management and sticky file updates also work without shell integration, including on Windows; PowerShell integration is not included.
@@ -7,6 +9,8 @@ Requires PHP 8.2+, Composer, and Laravel Vapor CLI. Session switching supports B
 ## Install from this checkout
 
 ```shell
+git clone https://github.com/HelgeSverre/vapor-swap.git
+cd vapor-swap
 composer install --no-dev
 ```
 
