@@ -1,6 +1,9 @@
-# vapor-swap
+# Vapor Sweep
 
-[![Tests](https://github.com/HelgeSverre/vapor-swap/actions/workflows/tests.yml/badge.svg)](https://github.com/HelgeSverre/vapor-swap/actions/workflows/tests.yml)
+[![Tests](https://img.shields.io/github/actions/workflow/status/HelgeSverre/vapor-swap/tests.yml?branch=main&style=flat-square&label=tests)](https://github.com/HelgeSverre/vapor-swap/actions/workflows/tests.yml)
+[![PHP 8.2+](https://img.shields.io/badge/PHP-8.2%2B-777BB4?style=flat-square&logo=php&logoColor=white)](composer.json)
+[![Shells: Bash, Zsh, Fish](https://img.shields.io/badge/shells-Bash%20%C2%B7%20Zsh%20%C2%B7%20Fish-8B5CF6?style=flat-square&logo=gnubash&logoColor=white)](#load-shell-integration)
+[![License: MIT](https://img.shields.io/github/license/HelgeSverre/vapor-swap?style=flat-square&color=22C55E)](LICENSE)
 
 Manage named Laravel Vapor profiles and switch accounts for one terminal or permanently. A profile pairs an API token with a team, so you can save multiple teams belonging to the same account under different names.
 
