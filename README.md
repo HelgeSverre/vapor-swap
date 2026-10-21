@@ -1,3 +1,5 @@
+![Vapor Sweep — a developer riding a glowing broom through a neon nebula, switching between cloud accounts](docs/assets/vapor-sweep-banner.png)
+
 # Vapor Sweep
 
 [![Tests](https://img.shields.io/github/actions/workflow/status/HelgeSverre/vapor-swap/tests.yml?branch=main&style=flat-square&label=tests)](https://github.com/HelgeSverre/vapor-swap/actions/workflows/tests.yml)
