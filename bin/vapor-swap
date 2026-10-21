@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+// Keep our dependency tree out of Vapor's process: it loads its own dependencies.
+if (($argv[1] ?? null) === '__vapor') {
+    require __DIR__.'/../src/Vapor/Launcher.php';
+    exit(\VaporSwap\Vapor\Launcher::run(array_slice($argv, 2)));
+}
+
+$autoload = $GLOBALS['_composer_autoload_path'] ?? (is_file(__DIR__.'/../vendor/autoload.php') ? __DIR__.'/../vendor/autoload.php' : __DIR__.'/../../../autoload.php');
+if (!is_file($autoload)) {
+    fwrite(STDERR, "Dependencies are missing. Run composer install.\n");
+    exit(1);
+}
+require $autoload;
+
+$shell = null;
+if (($argv[1] ?? null) === '__shell') {
+    $shell = $argv[2] ?? '';
+    $argv = array_merge([$argv[0]], array_slice($argv, 3));
+    $_SERVER['argv'] = $argv;
+    $_SERVER['argc'] = count($argv);
+}
+
+$app = new \VaporSwap\Application($shell, executable: realpath($_SERVER['SCRIPT_FILENAME']) ?: __FILE__);
+exit($app->run());

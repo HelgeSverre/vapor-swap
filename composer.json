@@ -1,0 +1,40 @@
+{
+    "name": "helgesverre/vapor-swap",
+    "description": "Manage Laravel Vapor profiles and switch accounts per terminal or permanently.",
+    "type": "project",
+    "license": "MIT",
+    "bin": [
+        "bin/vapor-swap"
+    ],
+    "require": {
+        "php": "^8.2",
+        "guzzlehttp/guzzle": "^7.9",
+        "symfony/console": "^7.4"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.24",
+        "phpunit/phpunit": "^11.5",
+        "symfony/process": "^7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "VaporSwap\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "VaporSwap\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "lint": "pint --test",
+        "format": "pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "platform": {
+            "php": "8.2.0"
+        }
+    }
+}

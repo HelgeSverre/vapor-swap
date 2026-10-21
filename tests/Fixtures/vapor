@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+
+// A small executable exercising the same Config API that the real Vapor uses.
+use Laravel\VaporCli\Config;
+
+if (($argv[1] ?? '') === 'set-team') {
+    Config::set('team', (int) $argv[2]);
+}
+if (($argv[1] ?? '') === 'nested') {
+    Config::set('test.nested.value', 'changed');
+    echo Config::get('test.nested.value')."\n";
+    exit;
+}
+echo json_encode(['token' => Config::get('token'), 'team' => Config::get('team'), 'home' => getenv('HOME'), 'arguments' => array_slice($argv, 1)])."\n";

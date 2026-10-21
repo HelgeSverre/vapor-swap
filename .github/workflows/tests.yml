@@ -1,0 +1,101 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: PHP ${{ matrix.php }} / ${{ matrix.os }}${{ matrix.experimental && ' (probe)' || '' }}
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: ubuntu-latest, php: '8.1', experimental: true}
+          - {os: ubuntu-latest, php: '8.2', experimental: false}
+          - {os: ubuntu-latest, php: '8.3', experimental: false}
+          - {os: ubuntu-latest, php: '8.4', experimental: false}
+          - {os: ubuntu-latest, php: '8.5', experimental: false}
+          - {os: ubuntu-latest, php: '8.6', experimental: true}
+          - {os: macos-latest, php: '8.4', experimental: false}
+          - {os: windows-latest, php: '8.3', experimental: false}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, dom, xml, xmlwriter, zip
+          coverage: none
+          tools: composer:v2
+      - name: Runtime version
+        run: php --version
+      - name: Install Unix shells
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y zsh fish
+      - name: Install macMATRIX_OS shells
+        if: runner.os == 'macMATRIX_OS'
+        run: brew install fish
+      - name: Install locked dependencies
+        id: install
+        run: composer install --prefer-dist --no-interaction
+      # config.platform selects the shared dependency baseline. This check uses
+      # the actual runner PHP, so an incompatible runtime cannot look green.
+      - name: Check actual runtime requirements
+        id: platform
+        run: composer check-platform-reqs
+      - name: Validate Composer metadata
+        run: composer validate --strict
+      - name: Lint
+        id: lint
+        run: composer lint
+      - name: Test
+        id: tests
+        run: composer test -- --log-junit junit.xml
+      - name: Install real Vapor CLI for compatibility test
+        if: runner.os != 'Windows'
+        run: composer create-project laravel/vapor-cli "$RUNNER_TEMP/vapor-cli" '^1.70' --no-dev --prefer-dist --no-interaction
+      - name: Test real Vapor CLI
+        id: vapor
+        if: runner.os != 'Windows'
+        env:
+          TEST_VAPOR_BINARY: ${{ runner.temp }}/vapor-cli/vapor
+        run: composer test -- --filter VaporCompatibilityTest
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-php-${{ matrix.php }}-${{ matrix.os }}
+          path: junit.xml
+          if-no-files-found: ignore
+      - name: Job summary
+        if: always()
+        shell: bash
+        env:
+          MATRIX_PHP: ${{ matrix.php }}
+          MATRIX_OS: ${{ matrix.os }}
+          CHECK_INSTALL: ${{ steps.install.outcome }}
+          CHECK_PLATFORM: ${{ steps.platform.outcome }}
+          CHECK_LINT: ${{ steps.lint.outcome }}
+          CHECK_TESTS: ${{ steps.tests.outcome }}
+          CHECK_VAPOR: ${{ steps.vapor.outcome }}
+        run: |
+          {
+            echo "### PHP $MATRIX_PHP / $MATRIX_OS"
+            echo "| Check | Outcome |"
+            echo "| --- | --- |"
+            echo "| Dependencies | $CHECK_INSTALL |"
+            echo "| Actual runtime requirements | $CHECK_PLATFORM |"
+            echo "| Lint | $CHECK_LINT |"
+            echo "| Tests | $CHECK_TESTS |"
+            echo "| Real Vapor CLI | $CHECK_VAPOR |"
+            if [ "$MATRIX_PHP" = '8.1' ]; then
+              echo ''
+              echo 'Compatibility probe: the current manifest and dependency baseline require PHP 8.2+.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
