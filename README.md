@@ -14,13 +14,10 @@ Requires PHP 8.2+, Composer, and the Vapor CLI. Terminal switching works with Zs
 ## Install
 
 ```shell
-git clone https://github.com/HelgeSverre/vapor-swap.git
-cd vapor-swap
-composer global config repositories.vapor-swap path "$PWD"
-composer global require 'helgesverre/vapor-swap:@dev'
+composer global require helgesverre/vapor-swap
 ```
 
-Keep the checkout in place: Composer links to it. If `vapor-swap` is not found, add the directory printed by `composer global config bin-dir --absolute` to your `PATH`.
+If `vapor-swap` is not found, add the directory printed by `composer global config bin-dir --absolute` to your `PATH`.
 
 ## Shell setup
 
