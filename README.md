@@ -1,6 +1,6 @@
-![Vapor Sweep — a developer riding a glowing broom through a neon nebula, switching between cloud accounts](docs/assets/vapor-sweep-banner.png)
+![Vapor Swap — a developer riding a glowing broom through a neon nebula, switching between cloud accounts](docs/assets/vapor-swap-banner.png)
 
-# Vapor Sweep
+# Vapor Swap
 
 [![Tests](https://img.shields.io/github/actions/workflow/status/HelgeSverre/vapor-swap/tests.yml?branch=main&style=flat-square&label=tests)](https://github.com/HelgeSverre/vapor-swap/actions/workflows/tests.yml)
 [![PHP 8.2+](https://img.shields.io/badge/PHP-8.2%2B-777BB4?style=flat-square&logo=php&logoColor=white)](composer.json)
